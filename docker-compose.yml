@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+    automobiles:
+        image: nginx:alpine
+        volumes:
+            - ./automobiles/nginx/conf.d/:/etc/nginx/conf.d/
+        ports:
+            - "8080:80"
+        depends_on:
+            - automobiles_ws
+        networks:
+            - internal_network
+
+    automobiles_ws:
+        build:
+            context: ./automobiles
+            dockerfile: ../compose/automobiles/Dockerfile
+        volumes:
+            - /var/www/vendor/
+            - ./automobiles/:/var/www
+        env_file:
+            - ./automobiles/local.env
+        networks:
+            - internal_network
+        depends_on:
+            - automobiles_store
+
+    automobiles_store: &common_store
+        image: mongo:4.2-bionic
+        volumes:
+            - automobiles_files:/data/db
+        env_file:
+            - ./automobiles/local.env
+        networks:
+            - internal_network
+    
+volumes:
+    automobiles_files: {}
+
+networks: 
+    internal_network: {}
