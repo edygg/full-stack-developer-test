@@ -43,7 +43,7 @@ RUN apt-get update \
         curl \
         netcat \
         pkg-config \
-        # Mongo deps
+        # MongoDB Client deps
         \ 
         mongodb-org-shell=4.2.7 \
         mongodb-org-tools=4.2.7 

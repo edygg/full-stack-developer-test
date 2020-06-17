@@ -36,8 +36,33 @@ services:
         networks:
             - internal_network
     
+    parking_fees:
+        build:
+            context: ./parking_fees
+            dockerfile: ../compose/parking_fees/Dockerfile
+        volumes:
+            - ./parking_fees:/webapp
+            - /app/node_modules
+        env_file:
+            - ./parking_fees/local.env
+        ports:
+            - "8081:3000"
+        networks:
+            - internal_network
+        depends_on:
+            - parking_fees_store
+        command: ['npm', 'start']
+    
+    parking_fees_store:
+        <<: *common_store
+        volumes:
+            - parking_fees_files:/data/db
+        env_file:
+            - ./parking_fees/local.env
+
 volumes:
     automobiles_files: {}
+    parking_fees_files: {}
 
 networks: 
     internal_network: {}
