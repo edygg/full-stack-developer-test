@@ -42,7 +42,7 @@ services:
             dockerfile: ../compose/parking_fees/Dockerfile
         volumes:
             - ./parking_fees:/webapp
-            - /app/node_modules
+            - /webapp/node_modules
         env_file:
             - ./parking_fees/local.env
         ports:
@@ -60,9 +60,34 @@ services:
         env_file:
             - ./parking_fees/local.env
 
+    parking_lots:
+        build:
+            context: ./parking_lots
+            dockerfile: ../compose/parking_lots/Dockerfile
+        volumes:
+            - ./parking_lots:/webapp
+            - /webapp/node_modules
+        env_file:
+            - ./parking_lots/local.env
+        ports:
+            - "8082:3000"
+        networks:
+            - internal_network
+        depends_on:
+            - parking_lots_store
+        command: ['npm', 'start']
+    
+    parking_lots_store:
+        <<: *common_store
+        volumes:
+            - parking_lots_files:/data/db
+        env_file:
+            - ./parking_lots/local.env
+
 volumes:
     automobiles_files: {}
     parking_fees_files: {}
+    parking_lots_files: {}
 
 networks: 
     internal_network: {}
