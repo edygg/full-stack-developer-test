@@ -1,7 +1,10 @@
 const mongoose = require('mongoose')
 
 // Importing models
-const ParkingFee = require('./ParkingFee')
+const Arrival = require('./Arrival')
+const Departure = require('./Departure')
+const OfficialLog = require('./OfficialLog')
+const ResidentQuota = require('./ResidentQuota')
 
 
 const connDatabase = function() {
@@ -9,7 +12,10 @@ const connDatabase = function() {
 }
 
 const Models = {
-    ParkingFee
+    Arrival,
+    Departure,
+    OfficialLog,
+    ResidentQuota,
 }
 
 module.exports = {
