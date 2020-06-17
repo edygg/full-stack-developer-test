@@ -1,11 +1,12 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
+const passport = require('passport')
 
 const Automobile = require('../api/automobiles')
 const { Models } = require('../database') 
 
 
-router.post('/', async function (request, response, next) {
+router.post('/', passport.authenticate('bearer', { session: false }),  async function (request, response, next) {
     let { automobileType, fee } = request.body
 
     if (!automobileType) {
@@ -51,7 +52,7 @@ router.post('/', async function (request, response, next) {
 
 });
 
-router.get('/:automobileType', async function(request, response, next) {
+router.get('/:automobileType', passport.authenticate('bearer', { session: false }), async function(request, response, next) {
     let { automobileType } = request.params
 
     try {
