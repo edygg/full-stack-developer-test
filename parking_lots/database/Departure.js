@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const moment = require('moment')
 
 const Automobile = require('../api/automobiles')
+const ParkingFee = require('../api/parkingFees')
 
 const departureSchema = new mongoose.Schema(
     {
@@ -55,10 +56,22 @@ departureSchema.methods.handle = async function(arrivalRelated) {
         result.message = "Resident quota accounted"
 
     } else if (await Automobile.isOfficial(this.licensePlate)) {
-        console.log("Official Handler")
+        const OfficialLog = mongoose.model('OfficialLog')
+
+        let officialLog = new OfficialLog({
+            licensePlate: this.licensePlate,
+            arrivalTime: arrivalTime,
+            departureTime: departureTime,
+        })
+
+        await officialLog.save()
+
+        result.message = "Official log registered"
     } else {
         // Treated as visitor
-        console.log("Visitor Handler")
+        const feePerMin = await ParkingFee.getParkingFee(Automobile.constants.VISITOR)
+        const payment = (stayInMinutes * feePerMin).toFixed(2)
+        result.message = `Your payment is $${payment}`
     }
     return result
 }
