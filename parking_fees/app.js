@@ -3,6 +3,8 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+const passport = require('passport');
+const BearerStrategy = require('passport-http-bearer').Strategy
 
 const indexRouter = require('./routes/index')
 const parkingFeeRouter = require('./routes/parkingFee')
@@ -18,6 +20,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter)
 app.use('/parking-fees', parkingFeeRouter)
 
+// Bearer Auth Strategy
+passport.use(new BearerStrategy(
+    function (token, done) {
+        if (!token) {
+            return done(null, false);
+        } else if (token === "E3lb3KP7RKejbyd") {
+            return done(null, system, { scope: 'all' });
+        } else {
+            return done({ error: "Auth error"});
+        }
+    }
+));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
