@@ -11,6 +11,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+        DB::table('automobile_types')->insert([
+            'type' => 'official',
+            'display_name' => 'Oficial'
+        ]);
+
+        DB::table('automobile_types')->insert([
+            'type' => 'resident',
+            'display_name' => 'Residente'
+        ]);
+
+        DB::table('automobile_types')->insert([
+            'type' => 'visitor',
+            'display_name' => 'Visitante'
+        ]);
     }
 }

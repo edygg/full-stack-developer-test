@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Jenssegers\Mongodb\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class CreateAutomobilesTable extends Migration
@@ -13,9 +13,13 @@ class CreateAutomobilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('automobiles', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('automobiles', function (Blueprint $collection) {
+            $collection->index(
+                'license_plate',
+                null,
+                null,
+                ['unique' => true]
+            );
         });
     }
 
